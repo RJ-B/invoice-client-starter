@@ -1,0 +1,5 @@
+@media (max-width: 576px) {
+  .invoice-chart-container {
+    height: 520px !important;
+  }
+}

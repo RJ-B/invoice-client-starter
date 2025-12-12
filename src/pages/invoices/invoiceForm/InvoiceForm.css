@@ -1,0 +1,194 @@
+/* ============================================
+   FULLSCREEN BACKDROP (modal overlay)
+============================================ */
+
+.invoice-form-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  opacity: 0;
+  animation: formBackdropFadeIn 0.35s ease forwards;
+}
+
+@keyframes formBackdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.closing-form-backdrop {
+  animation: formBackdropFadeOut 0.3s ease forwards;
+}
+
+@keyframes formBackdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ============================================
+   MODAL CARD – COMPACT GLASS EFFECT
+============================================ */
+
+.invoice-form-card {
+  width: 95%;
+  max-width: 560px;              /* menší šířka */
+  padding: 18px 22px;            /* menší padding */
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(25px);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.35),
+    0 2px 8px rgba(0,0,0,0.25);
+
+  color: #e2e8f0;
+  position: relative;
+
+  opacity: 0;
+  transform: translateY(25px);
+  animation: formCardPopup 0.35s ease forwards;
+
+  max-height: none;              /* žádný scroll */
+  overflow: visible;             /* žádný scroll */
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+@keyframes formCardPopup {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.closing-form-card {
+  animation: formCardClose 0.3s ease forwards;
+}
+
+@keyframes formCardClose {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.85); }
+}
+
+/* ============================================
+   TITLE – COMPACT
+============================================ */
+
+.invoice-form-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  background: linear-gradient(90deg, #36c6ff, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   CLOSE BUTTON
+============================================ */
+
+.close-btn {
+  position: absolute;
+  right: 18px;
+  top: 10px;
+  font-size: 26px;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.2s ease;
+}
+
+.close-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   FORM FIELDS – COMPACT INPUTS
+============================================ */
+
+.invoice-form-card .form-control,
+.invoice-form-card .form-select,
+.invoice-form-card textarea {
+  background: rgba(15, 23, 42, 0.85);         /* tmavší, jednotné s modalem */
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+
+  height: 32px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+/* specificky pro select – aby nepřebíjel bootstrap */
+.invoice-form-card select.form-select {
+  background-color: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.7);
+}
+
+/* barva rozbaleného seznamu (co jde, to ovládneme) */
+.invoice-form-card select.form-select option {
+  background-color: #020617;    /* velmi tmavé pozadí */
+  color: #e5e7eb;               /* světlý text */
+}
+
+/* placeholder option "Vyberte osobu" – světlejší, aby bylo vidět, že není vybráno */
+.invoice-form-card select.form-select option[value=""] {
+  color: #94a3b8;
+}
+
+/* FOCUS STAV – stejný glow jako u inputů */
+.invoice-form-card .form-control:focus,
+.invoice-form-card .form-select:focus,
+.invoice-form-card textarea:focus {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: #36c6ff;
+  box-shadow: 0 0 0 0.2rem rgba(54, 198, 255, 0.35);
+  color: #e5e7eb;
+}
+
+
+/* ============================================
+   GRID – MORE COMPACT
+============================================ */
+
+.invoice-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;         /* menší mezery */
+}
+
+/* Full-width rows */
+.full-row {
+  grid-column: 1 / -1;
+}
+
+/* ============================================
+   BUTTON ROW – COMPACT
+============================================ */
+
+.form-buttons {
+  margin-top: 6px;
+}
+
+.btn {
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .invoice-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

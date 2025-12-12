@@ -1,0 +1,300 @@
+/* ==========================================================
+   FULLSCREEN AUTH WRAPPER – NO SCROLL + CENTER
+   ========================================================== */
+
+.auth-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  padding: 0;
+}
+
+/* ==========================================================
+   AUTH CARD – AUTO HEIGHT + SAME HEIGHT SIDES FIX
+   ========================================================== */
+
+.auth-card {
+  position: relative;
+  width: min(500px, 92vw);
+  height: auto;
+  display: grid;
+}
+
+.auth-card > .auth-side {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+.auth-card.flipped .front {
+  transform: rotateY(180deg);
+}
+.auth-card.flipped .back {
+  transform: rotateY(0deg);
+}
+
+/* ==========================================================
+   CARD SIDES
+   ========================================================== */
+
+.auth-side {
+  position: relative;
+  height: 100%;
+  padding: 36px 32px;
+
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+
+  display: flex;
+  flex-direction: column;
+
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform .7s ease-out;
+}
+
+.front { transform: rotateY(0deg); }
+.back { transform: rotateY(-180deg); }
+
+/* ==========================================================
+   TITLES
+   ========================================================== */
+
+.welcome-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  background: linear-gradient(90deg, #0ea5e9, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome-subtitle {
+  text-align: center;
+  color: #cbd5e1;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+/* ==========================================================
+   FORM LAYOUT
+   ========================================================== */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 18px;
+}
+
+/* ==========================================================
+   FLOATING LABEL – NOTCH EFFECT (GLASS STYLE)
+   ========================================================== */
+
+.input-floating {
+  position: relative;
+  width: 100%;
+}
+
+.input-floating input {
+  width: 100%;
+  padding: 18px 16px 10px 16px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(46,46,46,0.22);
+  border-radius: 14px;
+
+  color: rgba(46, 46, 46);
+  font-size: 1rem;
+  outline: none;
+  transition: 0.25s ease;
+
+  /* --- 3D SHADOW MAGIC --- */
+  box-shadow:
+      0 8px 18px rgba(0, 0, 0, 0.35),      /* hlavní měkký stín */
+      0 4px 10px rgba(0, 0, 0, 0.25),      /* sekundární hloubka */
+      inset 0 1px 2px rgba(255,255,255,0.15); /* lehký vnitřní světelný zářez */
+}
+
+
+/* Label sedí přesně na borderu, ne uprostřed */
+.input-floating label {
+  position: absolute;
+  top: 0;
+  left: 14px;
+
+  transform: translateY(14px); /* label uvnitř */
+  color: rgba(46, 46, 46);
+  pointer-events: none;
+  transition: 0.25s ease;
+
+  padding: 0 6px;
+
+
+}
+
+/* Při psaní a focusu label přesně v hraně inputu */
+.input-floating input:focus + label,
+.input-floating input:not(:placeholder-shown) + label {
+  transform: translateY(-13px) scale(0.85);
+  color: rgba(46, 46, 46);
+}
+
+/* ==========================================================
+   REGISTER 2 COLUMN GRID
+   ========================================================== */
+
+.row-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  column-gap: 24px;
+  row-gap: 18px;
+  width: 100%;
+}
+
+.col-md-6 {
+  width: 100%;
+}
+
+@media (max-width: 520px) {
+  .row-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================
+   EXTRA ROW
+   ========================================================== */
+
+.extra-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-btn {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   BUTTONS
+   ========================================================== */
+
+.primary-btn {
+  margin-top: 8px;
+  padding: 15px 0;
+  width: 100%;
+  color: #fff;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  box-shadow: 0 12px 32px rgba(236, 72, 153, 0.35);
+}
+
+/* ==========================================================
+   SWITCH (footer)
+   ========================================================== */
+
+.switch-text-bottom {
+  margin-top: auto;
+  text-align: center;
+  color: rgba(46, 46, 46);
+  font-size: 0.95rem;
+}
+
+.switch-btn-bottom {
+  margin-left: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+
+  color: rgba(46, 46, 46);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  transition: all 0.25s ease;
+}
+
+.switch-btn-bottom:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================
+   MESSAGES
+   ========================================================== */
+
+.auth-msg {
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.auth-msg.error {
+  background: rgba(239, 68, 68, .35);
+  border: 1px solid rgba(239, 68, 68, .6);
+}
+
+.auth-msg.success {
+  background: rgba(34,197,94,.35);
+  border: 1px solid rgba(34,197,94,.6);
+}
+
+/* ==========================================================
+   SOCIAL ICONS
+   ========================================================== */
+
+.icons-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 440px) {
+  .auth-side {
+    padding: 24px;
+  }
+  .welcome-title {
+    font-size: 24px;
+  }
+}
+
+/* ==========================================================
+   Devider
+   ========================================================== */
+
+.divider {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: rgba(46, 46, 46);
+  font-size: 0.9rem;
+  margin: 20px 0 12px;
+}

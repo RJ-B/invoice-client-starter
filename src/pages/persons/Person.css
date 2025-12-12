@@ -1,0 +1,320 @@
+/* ============================================================
+   PERSON PAGE – GLASS WRAPPER
+   ============================================================ */
+
+.person-card {
+  width: 100%;
+  padding: 28px 32px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.35),
+    0 2px 8px rgba(0,0,0,0.25);
+
+  color: #e5e7eb;
+  margin-top: 32px;
+
+  /* === NEW: SCROLLABLE CONTENT === */
+  max-height: 75vh;          /* karta nezabere víc než 75 % výšky okna */
+  overflow: hidden;          /* nic nepřeteče ven */
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .person-card {
+    padding: 10px 12px;
+  }
+}
+
+
+
+/* ============================================================
+   HEADER – STEJNÝ STYL JAKO FAKTURY
+   ============================================================ */
+
+.person-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.person-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+
+  background: linear-gradient(90deg, #36c6ff, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+/* ============================================================
+   NEW PERSON BUTTON – NEON LIKE "Nová faktura"
+   ============================================================ */
+
+.btn-new-person {
+  padding: 10px 18px;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.25s ease;
+
+  box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+}
+
+.btn-new-person:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 16px rgba(59,130,246,0.9),
+    0 0 28px rgba(168,85,247,0.8),
+    0 0 40px rgba(236,72,153,0.6);
+}
+
+
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+.divider-person {
+  margin: 22px 0;
+  width: 100%;
+
+  color: #cbd5e1;
+  text-align: center;
+  font-size: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-person::before,
+.divider-person::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+  margin: 0 16px;
+}
+
+
+
+/* ============================================================
+   SCROLL WRAPPER FOR TABLE
+   ============================================================ */
+
+.table-wrapper {
+  flex: 1;                    /* vyplní prostor pod headerem */
+  overflow-y: auto;           /* scroll jen v této části */
+  margin-top: 16px;
+  padding-right: 8px;         /* aby scroll nepřekrýval text */
+}
+
+/* Scrollbar styl */
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 4px;
+}
+
+/* Scrollovací oblast jen pro tabulku */
+.table-scroll-area {
+  max-height: 55vh;        /* výška tabulky – můžeš upravit */
+  overflow-y: auto;        /* vertikální scroll */
+  overflow-x: hidden;      /* žádný horizontální scroll */
+  margin-top: 16px;
+  padding-right: 6px;      /* prostor pro scrollbar */
+}
+
+/* Scrollbar styl */
+.table-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 4px;
+}
+
+
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+.table thead {
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
+  color: #ffffff;
+}
+
+.table thead th {
+  padding: 14px;
+  font-weight: 700;
+  border: none;
+}
+
+.glass-table thead th {
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
+  color: white !important;
+}
+
+
+
+/* ============================================================
+   TABLE BODY
+   ============================================================ */
+
+.table tbody tr {
+  transition: 0.25s ease;
+}
+
+.table tbody tr:hover {
+  background: rgba(255,255,255,0.10);
+  box-shadow:
+    0 0 12px rgba(54,198,255,0.7),
+    0 0 22px rgba(139,92,246,0.4);
+  transform: translateY(-2px);
+}
+
+.table td {
+  padding: 14px;
+  vertical-align: middle;
+  border-color: rgba(255,255,255,0.25) !important;
+}
+
+/* normální text */
+.table tbody td {
+  color: #2f2f2f !important;
+  font-weight: 400;
+}
+
+/* zvýrazněné jméno */
+.table tbody td:nth-child(2) {
+  color: #2b2b2b !important;
+  font-weight: 500;
+}
+
+/* hover kontrast */
+.table tbody tr:hover td {
+  color: #fff !important;
+  font-weight: 500;
+}
+
+
+
+/* ============================================================
+   TABLE BUTTONS (Zobrazit / Upravit / Odstranit)
+   ============================================================ */
+
+.btn-info,
+.btn-warning,
+.btn-danger {
+  border-radius: 10px !important;
+  padding: 7px 14px !important;
+  font-weight: 600 !important;
+  border: none;
+  transition: 0.25s ease !important;
+}
+
+/* ZOBRAZIT */
+.btn-info {
+  background: linear-gradient(135deg, #36c6ff, #0ea5e9) !important;
+  box-shadow: 0 2px 8px rgba(14,165,233,0.5);
+}
+.btn-info:hover {
+  box-shadow:
+    0 0 18px rgba(14,165,233,0.9),
+    0 0 28px rgba(14,165,233,0.6);
+  transform: translateY(-2px);
+}
+
+/* UPRAVIT */
+.btn-warning {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.5);
+}
+.btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(245,158,11,0.9),
+    0 0 30px rgba(245,158,11,0.7);
+}
+
+/* ODSTRANIT */
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+}
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(239,68,68,1),
+    0 0 32px rgba(239,68,68,0.7);
+}
+
+
+
+/* ============================================================
+   LABEL NAD TABULKOU
+   ============================================================ */
+
+.fw-semibold {
+  color: #2f2f2f;
+  font-weight: 600 !important;
+}
+
+
+
+/* ============================================================
+   PAGE WRAPPER
+   ============================================================ */
+
+.person-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.person-rays {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.person-content {
+  position: relative;
+  z-index: 10;
+
+  width: 100%;
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 20px 30px;
+}

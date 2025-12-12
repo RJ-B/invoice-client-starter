@@ -1,0 +1,147 @@
+/* ============================================
+   FULLSCREEN BACKDROP (překryje tabulku)
+============================================ */
+
+.invoice-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 500; /* nad tabulkou */
+  opacity: 0;
+  animation: backdropFadeIn 0.35s ease forwards;
+}
+
+/* Fade-in animace backdrop */
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Zavírací animace backdrop */
+.closing-backdrop {
+  animation: backdropFadeOut 0.3s ease forwards;
+}
+
+@keyframes backdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ============================================
+   MODAL CARD – GLASS EFFECT + ANIMACE
+============================================ */
+
+.invoice-detail-card {
+  width: 95%;
+  max-width: 650px;
+  padding: 32px;
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(25px);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.35),
+    0 2px 8px rgba(0,0,0,0.25);
+
+  color: #e2e8f0;
+  transform: translateY(25px);
+  opacity: 0;
+  animation: cardPopup 0.35s ease forwards;
+}
+
+/* Popup animace */
+@keyframes cardPopup {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Zavírací animace modalu */
+.closing-card {
+  animation: cardClose 0.3s ease forwards;
+}
+
+@keyframes cardClose {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+/* ============================================
+   TITLE
+============================================ */
+
+.invoice-detail-card h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 18px;
+
+  background: linear-gradient(90deg, #36c6ff, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   ROWS / LABELS
+============================================ */
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  opacity: 0.7;
+}
+
+.value {
+  font-weight: 600;
+}
+
+/* ============================================
+   CLOSE BUTTON
+============================================ */
+
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 28px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 0.2s ease;
+}
+
+.close-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   BUTTONS BOTTOM
+============================================ */
+
+.button-row {
+  margin-top: 30px;
+}

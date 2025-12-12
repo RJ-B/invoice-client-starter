@@ -1,0 +1,154 @@
+/* ===== ANIMOVANÉ POZADÍ ===== */
+.dashboard-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, #0d6efd, #6610f2, #6f42c1);
+  background-size: 200% 200%;
+  animation: gradientMove 12s ease infinite;
+  filter: brightness(0.85);
+}
+
+@keyframes gradientMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== LAYOUT ===== */
+.dashboard-container {
+  min-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+  text-align: center;
+    position: relative;
+  z-index: 10;
+}
+
+.dashboard-title {
+  color: white;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 55px;
+  text-shadow: 0 0 20px rgba(0, 0, 0, .55);
+}
+
+/* ===== GRID ===== */
+.dashboard-grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(3, 260px);
+}
+
+@media (max-width: 920px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 260px);
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(1, 260px);
+  }
+}
+
+/* ===== BOXY ===== */
+.dash-box {
+  position: relative;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 22px;
+  padding: 45px 25px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform .25s, box-shadow .35s;
+  overflow: visible;
+}
+
+.dash-box:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .38);
+}
+
+/* ===== IKONY ===== */
+.dash-icon {
+  font-size: 68px;
+  margin-bottom: 18px;
+  color: #fff;
+  transition: transform .35s, text-shadow .35s;
+}
+
+.dash-box:hover .dash-icon {
+  transform: scale(1.18);
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.85);
+}
+
+/* ===== POPIS ===== */
+.dash-label {
+  font-size: 26px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 12px rgba(0, 0, 0, .55);
+}
+
+/* ===================================================== */
+/* ========= ELECTRIC LIGHTNING BORDER EFFECT ========== */
+/* ===================================================== */
+
+.electric-border {
+  --electric-color: #a370ff;
+  border-radius: 22px;
+}
+
+.eb-layers {
+  pointer-events: none;
+  position: absolute;
+  inset: -3px;
+  border-radius: 26px;
+  opacity: 0;                      /* výchozí neviditelnost */
+  transition: opacity .25s ease;
+  z-index: 3;                      /* nad boxem → viditelná elektřina */
+}
+
+.dash-box:hover .eb-layers {
+  opacity: 1;
+}
+
+/* vrstvy světla */
+.eb-stroke,
+.eb-glow-1,
+.eb-glow-2,
+.eb-background {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-sizing: border-box;
+}
+
+.eb-stroke {
+  border: 2px solid var(--electric-color);
+}
+
+.eb-glow-1 {
+  border: 2px solid color-mix(in srgb, var(--electric-color), transparent 35%);
+  filter: blur(7px);
+  opacity: .8;
+}
+
+.eb-glow-2 {
+  border: 2px solid color-mix(in srgb, var(--electric-color), white 45%);
+  filter: blur(18px);
+  opacity: .65;
+}
+
+.eb-background {
+  background: radial-gradient(circle, var(--electric-color), transparent 75%);
+  filter: blur(54px);
+  opacity: .4;
+  z-index: -1;
+}

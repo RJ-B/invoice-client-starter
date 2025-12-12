@@ -1,0 +1,284 @@
+/* ============================================
+   GLASS INVOICE CARD (stejné jako person-card)
+   ============================================ */
+
+.invoice-card {
+  width: 100%;
+  padding: 32px;
+  border-radius: 24px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.35),
+    0 2px 8px rgba(0,0,0,0.25);
+
+  color: #e2e8f0;
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .invoice-card {
+    padding: 12px;
+  }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #0ea5e9, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   NEW INVOICE BUTTON
+   ============================================ */
+
+.btn-new-invoice {
+  padding: 12px 20px;
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+  color: #fff;
+
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 0 12px rgba(14,165,233,0.7),
+    0 0 22px rgba(139,92,246,0.5);
+}
+
+.btn-new-invoice:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 20px rgba(14,165,233,1),
+    0 0 35px rgba(139,92,246,0.9),
+    0 0 55px rgba(236,72,153,0.6);
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.invoice-divider {
+  margin: 26px 0;
+  width: 100%;
+
+  color: #cbd5e1;
+  text-align: center;
+  font-size: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-divider::before,
+.invoice-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  margin: 0 16px;
+}
+
+/* ============================================
+   SCROLL WRAPPER FOR TABLE (max 5 rows visible)
+   ============================================ */
+
+.glass-table-scroll {
+  max-height: 380px;       /* cca 5 řádků */
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ============================================
+   TABLE BASE
+   ============================================ */
+
+.glass-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+}
+
+/* ============================================
+   STICKY HEADER
+   ============================================ */
+
+.glass-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
+  color: white !important;
+
+  padding: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  border: none;
+}
+
+/* ============================================
+   TABLE ROWS
+   ============================================ */
+
+.glass-table tbody tr {
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+.glass-table tbody tr:hover {
+  background: rgba(255,255,255,0.08);
+  box-shadow:
+    0 0 12px rgba(0, 217, 255, 0.7),
+    0 0 22px rgba(139,92,246,0.5);
+  transform: translateY(-2px);
+}
+
+.glass-table td {
+  padding: 14px;
+  vertical-align: middle;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* ============================================
+   BUTTONS – ACTIONS
+   ============================================ */
+
+.btn-info,
+.btn-warning,
+.btn-danger {
+  border-radius: 12px !important;
+  padding: 8px 14px !important;
+  font-weight: 600 !important;
+  transition: 0.25s ease !important;
+  border: none;
+}
+
+/* Zobrazit */
+.btn-info {
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8) !important;
+  box-shadow: 0 0 12px rgba(14,165,233,0.6);
+}
+.btn-info:hover {
+  box-shadow: 0 0 20px rgba(14,165,233,0.9), 0 0 35px rgba(14,165,233,0.5);
+  transform: translateY(-2px);
+}
+
+/* Upravit */
+.btn-warning {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+  box-shadow: 0 0 12px rgba(245,158,11,0.6);
+}
+.btn-warning:hover {
+  box-shadow: 0 0 20px rgba(245,158,11,0.9), 0 0 35px rgba(245,158,11,0.5);
+  transform: translateY(-2px);
+}
+
+/* Odstranit */
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #f87171) !important;
+  box-shadow: 0 0 12px rgba(239,68,68,0.6);
+}
+.btn-danger:hover {
+  box-shadow: 0 0 20px rgba(239,68,68,1), 0 0 40px rgba(239,68,68,0.6);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   LABEL ABOVE TABLE
+   ============================================ */
+
+.fw-semibold {
+  font-size: 1rem;
+  color: #b4b8bd;
+}
+
+/* ============================================
+   PAGE WRAPPER + BACKGROUND
+   ============================================ */
+
+.invoice-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden; /* Desktop – nescrolluje přes wrapper */
+}
+
+.invoice-rays {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   PAGE CONTENT (DESKTOP DEFAULT)
+   ============================================ */
+
+.invoice-content {
+  position: relative;
+  z-index: 10;
+
+  width: 100%;
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 20px 30px;
+
+  /* Desktop = NO SCROLL */
+  overflow: visible;
+  max-height: none;
+}
+
+/* ============================================
+   MOBILE + TABLET — SCROLL ENABLED
+   ============================================ */
+
+@media (min-width: 992px) {
+
+  .invoice-content {
+    margin: 20px auto 0; /* menší mezery kolem obsahu */
+    padding: 16px;
+
+    /* SCROLL UMOŽNĚN */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Viditelná výška = celá obrazovka minus mobilní navbar */
+    max-height: calc(100vh - 70px);
+
+    /* aby scroll byl pěkný a neřezal obsah */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Zabrání rozbití wrapperu na mobilu */
+  .invoice-wrapper {
+    overflow: hidden;
+  }
+}

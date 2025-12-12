@@ -1,0 +1,296 @@
+/* ============================================================
+   GLASS NAVBAR – HLAVNÍ DESKTOP VERZE
+   ============================================================ */
+
+.glass-nav {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 12px 30px;
+  background: rgba(255, 255, 255, 0.05);  
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 0 8px rgba(255, 255, 255, 0.12),
+    inset 0 0 25px rgba(255, 255, 255, 0.08),
+    0 8px 25px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1000;
+}
+
+.glass-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.08), transparent 70%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.glass-nav::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0) 60%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.glass-nav .navbar-brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* HIDE BRAND ON MOBILE */
+@media (max-width: 768px) {
+  .glass-nav .navbar-brand {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   GLASS NAV GROUP – DESKTOP
+   ============================================================ */
+
+.glass-nav-group {
+  display: flex;
+  justify-content: center;
+}
+
+.glass-items {
+  --bg: rgba(255, 255, 255, 0.06);
+  --text: #e5e5e5;
+  display: flex;
+  position: relative;
+  background: var(--bg);
+  border-radius: 1rem;
+  padding: 0;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 1px 1px 4px rgba(255, 255, 255, 0.2),
+    inset -1px -1px 6px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* DESKTOP ITEMS */
+.glass-item {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.4rem;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.25s;
+  position: relative;
+  z-index: 2;
+}
+
+.glass-item:hover {
+  color: white;
+}
+
+.glass-item.active {
+  color: white;
+}
+
+/* HIDE ICONS ON DESKTOP */
+.nav-icon {
+  display: none;
+}
+
+.nav-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* DESKTOP GLIDER */
+.glass-glider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(100% / 3);
+  border-radius: 1rem;
+  z-index: 1;
+  background: linear-gradient(135deg, #0ea5e955, #8b5cf6cc);
+  box-shadow:
+    0 0 18px rgba(14,165,233,0.45),
+    0 0 10px rgba(139,92,246,0.35) inset;
+  transition: transform 0.45s cubic-bezier(0.37, 1.95, 0.66, 0.56);
+}
+
+
+/* ============================================================
+   MOBILNÍ VERZE – IKONY + ODSTUPY + FIX GLIDERU
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  .glass-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: 100%;
+    border-radius: 0;
+
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    box-shadow:
+      0 -4px 25px rgba(0,0,0,0.45),
+      inset 0 0 12px rgba(255,255,255,0.08);
+
+    z-index: 9999;
+  }
+
+  .navbar-nav {
+    display: none !important;
+  }
+
+  /* === TADY JE KLÍČ K CENTROVÁNÍ === */
+  .glass-nav-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .glass-nav{
+    display: block;
+  }
+
+  .glass-items {
+    display: flex;
+    width: 100%;
+    margin: 0 auto;         /* VYROVNÁ UPROSTŘED */
+    justify-content: center;
+    gap: 0;                 /* žádné mezery */
+
+    background: none;
+    box-shadow: none;
+  }
+
+.glass-item {
+    flex: 1 1 0;
+    min-width: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 0;
+    gap: 6px;
+
+    position: relative;
+    z-index: 1;   /* <<< důležité */
+}
+
+  /* === IKONY === */
+  .nav-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(51, 50, 50, 0.5);
+    color: #272626;
+  }
+
+  .glass-item.active .nav-icon {
+    background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+    color: white;
+  }
+
+  /* === TEXT === */
+  .nav-label {
+    font-size: 12px;
+    color: rgba(32, 32, 32, 0.8);
+  }
+
+  .glass-item.active .nav-label {
+    color: white;
+  }
+
+  /* === GLIDER = 25% ŠÍŘKY, VŽDY UPROSTŘED === */
+.glass-glider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 25%;
+    height: 100%;
+
+    background: linear-gradient(135deg, #0ea5e955, #8b5cf6cc);
+    border-radius: 14px;
+
+    box-shadow:
+      inset 0 0 12px rgba(255,255,255,0.25),
+      0 0 18px rgba(14,165,233,0.35);
+
+    transition: transform 0.45s cubic-bezier(0.37, 1.95, 0.66, 0.56);
+
+    z-index: 0;             /* pod itemy */
+    pointer-events: none;   /* neblokuje klikání */
+}
+}
+
+/* SCHOVAT MOBILNÍ LOGOUT ITEM NA DESKTOPU */
+@media (min-width: 769px) {
+  .logout-item {
+    display: none !important;
+  }
+}
+
+/* DESKTOP – 3 SEKCE V NAVBARU */
+@media (min-width: 769px) {
+
+  .nav-inner {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  /* Levá sekce */
+  .navbar-brand.desktop-only {
+    justify-self: start;
+  }
+
+  /* Střed nav – přesné centrování */
+  .glass-nav-group {
+    justify-self: center;
+  }
+
+  /* Pravá sekce – email + tlačítko */
+  .navbar-nav.desktop-only {
+    justify-self: end;
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+
