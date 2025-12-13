@@ -282,3 +282,70 @@
     overflow: hidden;
   }
 }
+
+/* ============================================
+   FILTER PANEL – MOBILE COLLAPSE
+   ============================================ */
+
+.invoice-filter-panel {
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+
+/* =========================
+   MOBILE / TABLET
+   ========================= */
+@media (max-width: 767px) {
+
+  .invoice-filter-panel {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .invoice-filter-panel.open {
+    max-height: 1000px; /* dostatečně velké */
+    opacity: 1;
+  }
+}
+
+/* =========================
+   DESKTOP – VŽDY VIDITELNÉ
+   ========================= */
+@media (min-width: 768px) {
+
+  .invoice-filter-panel {
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible;
+  }
+}
+
+/* ============================================
+   MOBILE – ZOBRAZIT JEN:
+   ČÍSLO FAKTURY | CENA | AKCE
+   ============================================ */
+@media (max-width: 768px) {
+
+  /* Skrýt sloupce: #, Prodávající, Nakupující */
+  .glass-table th:nth-child(1),
+  .glass-table td:nth-child(1),
+  .glass-table th:nth-child(3),
+  .glass-table td:nth-child(3),
+  .glass-table th:nth-child(4),
+  .glass-table td:nth-child(4) {
+    display: none;
+  }
+
+  /* Zarovnání ceny na mobilu */
+  .glass-table td:nth-child(5),
+  .glass-table th:nth-child(5) {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Akce – menší padding, ať se vejdou */
+  .glass-table td:nth-child(6) {
+    padding: 8px;
+  }
+}
+
