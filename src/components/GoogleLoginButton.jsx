@@ -55,7 +55,7 @@ export default function AuthCard() {
   };
 
   // =============================================
-  // REGISTRACE (email + heslo + jméno + telefon)
+  // REGISTRACE
   // =============================================
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -81,7 +81,7 @@ export default function AuthCard() {
   };
 
   // =============================================
-  // GOOGLE LOGIN / REGISTER
+  // GOOGLE LOGIN
   // =============================================
   const handleGoogleLogin = () => {
     /* global google */
@@ -90,18 +90,18 @@ export default function AuthCard() {
       callback: async (response) => {
         try {
           const res = await apiPost("/api/auth/google", {
-            googleId: null,          // backend si vezme ID z tokenu
+            googleId: null,
             email: null,
             fullName: null,
             picture: null,
-            idToken: response.credential, // GOOGLE ID TOKEN
+            idToken: response.credential,
           });
 
           localStorage.setItem("token", res.token);
           localStorage.setItem("user", JSON.stringify(res));
 
           navigate("/");
-        } catch (error) {
+        } catch {
           setMsg("Google přihlášení selhalo.");
         }
       },
@@ -110,15 +110,12 @@ export default function AuthCard() {
     google.accounts.id.prompt();
   };
 
-  // =============================================
   const isSuccess = msg.includes("úspěšně");
 
   return (
     <div className={`auth-card ${flipped ? "flipped" : ""}`}>
 
-      {/* =====================================================
-            LOGIN SIDE
-      ====================================================== */}
+      {/* LOGIN */}
       <div className="auth-side front">
         <h2 className="auth-title">Přihlášení</h2>
 
@@ -154,7 +151,8 @@ export default function AuthCard() {
 
         <div className="social-container">
           <button className="social-btn desktop-only" onClick={handleGoogleLogin}>
-            <FcGoogle size={20} className="me-2" /> Pokračovat přes Google
+            <FcGoogle size={20} className="me-2" />
+            Pokračovat přes Google
           </button>
         </div>
 
@@ -166,9 +164,7 @@ export default function AuthCard() {
         </p>
       </div>
 
-      {/* =====================================================
-            REGISTER SIDE
-      ====================================================== */}
+      {/* REGISTER */}
       <div className="auth-side back">
         <h2 className="auth-title">Registrace</h2>
 
@@ -179,7 +175,6 @@ export default function AuthCard() {
         )}
 
         <form onSubmit={handleRegister} className="auth-form">
-
           <div className="input-box">
             <input
               type="text"

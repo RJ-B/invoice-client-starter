@@ -1,19 +1,30 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { apiGet, apiPost, apiPut } from "../../../utils/api";
-import InputField from "../../../components/InputField";
-import InputCheck from "../../../components/InputCheck";
+import InputField from "@/components/input/InputField";
+import InputCheck from "@/components/input/InputCheck";
 import FlashMessage from "../../../components/FlashMessage";
 import Country from "../Country";
 import { useQueryClient } from "@tanstack/react-query";
 import "./PersonForm.css";
 
+/**
+ * Formulářová karta pro vytvoření nebo úpravu osoby.
+ *
+ * @param {number|string|null} id - ID osoby (pokud existuje, jedná se o editaci)
+ * @param {Function} onClose - Callback pro zavření modalu
+ */
 export default function PersonFormCard({ id, onClose }) {
   const queryClient = useQueryClient();
+
+  /* ==================== UI STATES ==================== */
 
   const [closing, setClosing] = useState(false);
   const [sent, setSent] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+
+  /* ==================== FORM DATA ==================== */
 
   const [person, setPerson] = useState({
     name: "",
@@ -28,10 +39,11 @@ export default function PersonFormCard({ id, onClose }) {
     zip: "",
     city: "",
     country: Country.CZECHIA,
-    note: ""
+    note: "",
   });
 
-  // === LOAD DATA IN EDIT MODE ===
+  /* ==================== LOAD DATA (EDIT MODE) ==================== */
+
   useEffect(() => {
     if (id) {
       apiGet(`/api/persons/${id}`)
@@ -40,13 +52,15 @@ export default function PersonFormCard({ id, onClose }) {
     }
   }, [id]);
 
-  // === CLOSE WITH ANIMATION ===
+  /* ==================== CLOSE WITH ANIMATION ==================== */
+
   const startClosing = () => {
     setClosing(true);
     setTimeout(() => onClose(), 300);
   };
 
-  // === SUBMIT ===
+  /* ==================== SUBMIT ==================== */
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -67,6 +81,8 @@ export default function PersonFormCard({ id, onClose }) {
       .finally(() => setSent(true));
   };
 
+  /* ==================== RENDER ==================== */
+
   return (
     <div
       className={`person-form-card-wide ${
@@ -75,12 +91,18 @@ export default function PersonFormCard({ id, onClose }) {
       onClick={(e) => e.stopPropagation()}
     >
       {/* CLOSE BUTTON */}
-      <button className="close-btn" onClick={startClosing}>
+      <button
+        type="button"
+        className="close-btn"
+        onClick={startClosing}
+      >
         ×
       </button>
 
       {/* TITLE */}
-      <h2 className="mb-3">{id ? "Upravit osobu" : "Vytvořit osobu"}</h2>
+      <h2 className="mb-3">
+        {id ? "Upravit osobu" : "Vytvořit osobu"}
+      </h2>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
@@ -115,7 +137,10 @@ export default function PersonFormCard({ id, onClose }) {
               label="IČO"
               value={person.identificationNumber}
               handleChange={(e) =>
-                setPerson({ ...person, identificationNumber: e.target.value })
+                setPerson({
+                  ...person,
+                  identificationNumber: e.target.value,
+                })
               }
             />
 
@@ -274,5 +299,18 @@ export default function PersonFormCard({ id, onClose }) {
       </form>
     </div>
   );
-
 }
+
+/* ==================== PROP TYPES ==================== */
+
+PersonFormCard.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  onClose: PropTypes.func.isRequired,
+};
+
+PersonFormCard.defaultProps = {
+  id: null,
+};

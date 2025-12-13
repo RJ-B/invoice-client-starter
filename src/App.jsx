@@ -19,7 +19,7 @@ import PageContainer from "./components/layout/PageContainer";
 import TableContainer from "./components/layout/TableContainer";
 
 import Navigation from "./components/navbar/Navigation"; // jediný navbar
-import MainPage from "./pages/MainPage";
+import MainPage from "./pages/main/MainPage";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./components/navbar/Navbar.css";

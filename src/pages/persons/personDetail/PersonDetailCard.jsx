@@ -1,19 +1,37 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { usePersonDetail } from "../hooks/usePersonDetail";
 import Loader from "../../../components/loading/Loader";
 import "./PersonDetail.css";
 import Country from "../Country";
 
+/**
+ * Detailní karta osoby zobrazená v modálním okně.
+ *
+ * @param {number|string} id - ID osoby
+ * @param {Function} onClose - Callback pro zavření modalu
+ */
 export default function PersonDetailCard({ id, onClose }) {
+  /**
+   * Načtení detailu osoby pomocí React Query hooku.
+   */
   const { data: person, isLoading } = usePersonDetail(id);
 
   if (isLoading) return <Loader />;
 
+  /**
+   * Pokud osoba nebyla nalezena, komponenta se nevykreslí.
+   * Logika zůstává beze změny.
+   */
   if (!person) {
     console.error("❌ Person nenalezen:", id);
     return null;
   }
 
+  /**
+   * Zavření modalu s animační třídou.
+   * Používá přímou práci s DOM (záměrně zachováno).
+   */
   const closeWithAnimation = () => {
     const backdrop = document.querySelector(".person-detail-backdrop");
     const card = document.querySelector(".person-detail-card");
@@ -24,6 +42,9 @@ export default function PersonDetailCard({ id, onClose }) {
     setTimeout(() => onClose(), 300);
   };
 
+  /**
+   * Textová reprezentace země.
+   */
   const countryLabel =
     person.country === Country.CZECHIA
       ? "Česká republika"
@@ -38,9 +59,16 @@ export default function PersonDetailCard({ id, onClose }) {
         }
       }}
     >
-      <div className="person-detail-card" onClick={(e) => e.stopPropagation()}>
-        
-        <button className="close-btn" onClick={closeWithAnimation}>
+      <div
+        className="person-detail-card"
+        onClick={(e) => e.stopPropagation()}
+      >
+
+        <button
+          type="button"
+          className="close-btn"
+          onClick={closeWithAnimation}
+        >
           ×
         </button>
 
@@ -111,3 +139,13 @@ export default function PersonDetailCard({ id, onClose }) {
     </div>
   );
 }
+
+/* ==================== PROP TYPES ==================== */
+
+PersonDetailCard.propTypes = {
+  id: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
+  onClose: PropTypes.func.isRequired,
+};

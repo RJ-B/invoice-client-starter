@@ -1,7 +1,29 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+
+  /**
+   * Alias pro pohodlné importy:
+   * @/components/...
+   * @/utils/...
+   * @/pages/...
+   */
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
+
+  server: {
+    headers: {
+      /**
+       * Povolit komunikaci mezi okny (nutné pro Google OAuth)
+       */
+      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
+      "Cross-Origin-Embedder-Policy": "unsafe-none",
+    },
+  },
+});

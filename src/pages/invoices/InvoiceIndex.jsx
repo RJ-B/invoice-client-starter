@@ -11,6 +11,13 @@ import InvoiceForm from "./invoiceForm/InvoiceForm";
 
 import "./Invoice.css";
 
+/**
+ * Stránka se seznamem faktur + filtry + modaly.
+ *
+ * Poznámka k mazání:
+ * - po smazání je potřeba invalidovat queryKey, který používá hook useInvoices(endpoint)
+ * - hook má queryKey ["invoices", endpoint], takže invalidujeme prefixem ["invoices"]
+ */
 const InvoiceIndex = ({ type }) => {
   const { ico } = useParams();
   const queryClient = useQueryClient();
@@ -56,21 +63,65 @@ const InvoiceIndex = ({ type }) => {
 
   const { data: invoices, isLoading } = useInvoices(endpoint);
 
+  /**
+   * Aplikuje filtry:
+   * - vyčistí prázdné hodnoty
+   * - převede čísla
+   * - invaliduje seznam faktur
+   */
   const applyFilters = () => {
     const cleaned = {};
 
     if (form.buyerID.trim()) cleaned.buyerID = form.buyerID.trim();
     if (form.sellerID.trim()) cleaned.sellerID = form.sellerID.trim();
     if (form.product.trim()) cleaned.product = form.product.trim();
-    if (form.minPrice && !isNaN(form.minPrice)) cleaned.minPrice = Number(form.minPrice);
-    if (form.maxPrice && !isNaN(form.maxPrice)) cleaned.maxPrice = Number(form.maxPrice);
+    if (form.minPrice && !isNaN(form.minPrice))
+      cleaned.minPrice = Number(form.minPrice);
+    if (form.maxPrice && !isNaN(form.maxPrice))
+      cleaned.maxPrice = Number(form.maxPrice);
     if (form.limit && !isNaN(form.limit)) cleaned.limit = Number(form.limit);
 
     setFilters(cleaned);
-    queryClient.invalidateQueries(["invoices"]);
+
+    // Důležité: invalidujeme prefixem, protože queryKey je ["invoices", endpoint]
+    queryClient.invalidateQueries({ queryKey: ["invoices"] });
 
     // zavřít filtry na mobilu
     setFiltersOpen(false);
+  };
+
+  /**
+   * Smaže fakturu a obnoví seznam.
+   *
+   * @param {number|string} id - ID faktury z databáze
+   */
+  const deleteInvoice = async (id) => {
+    if (id === null || id === undefined || id === "") {
+      alert("Nelze odstranit fakturu – chybí ID.");
+      return;
+    }
+
+    const ok = window.confirm("Opravdu chcete fakturu odstranit?");
+    if (!ok) return;
+
+    try {
+      await apiDelete("/api/invoices/" + id);
+
+      // Pokud má uživatel otevřený detail smazané faktury, zavřeme ho
+      if (selectedInvoiceId === id) {
+        setSelectedInvoiceId(null);
+      }
+
+      // Spolehlivá invalidace všech seznamů faktur
+      queryClient.invalidateQueries({ queryKey: ["invoices"] });
+    } catch (error) {
+      console.error("Chyba při mazání faktury:", error);
+      alert(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Nepodařilo se odstranit fakturu."
+      );
+    }
   };
 
   if (isLoading) return <Loader />;
@@ -84,7 +135,6 @@ const InvoiceIndex = ({ type }) => {
 
   return (
     <div className="invoice-card">
-
       {/* HEADER */}
       <div className="invoice-header mb-3">
         <h1>{title}</h1>
@@ -108,18 +158,17 @@ const InvoiceIndex = ({ type }) => {
 
           {/* FILTER PANEL */}
           <div
-            className={`invoice-filter-panel ${
-              filtersOpen ? "open" : ""
-            } d-md-block`}
+            className={`invoice-filter-panel ${filtersOpen ? "open" : ""} d-md-block`}
           >
             <div className="row g-2 mb-4">
-
               <div className="col-12 col-sm-6 col-md-3 col-lg-2">
                 <input
                   className="form-control"
                   placeholder="buyerID"
                   value={form.buyerID}
-                  onChange={(e) => setForm({ ...form, buyerID: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, buyerID: e.target.value })
+                  }
                 />
               </div>
 
@@ -128,7 +177,9 @@ const InvoiceIndex = ({ type }) => {
                   className="form-control"
                   placeholder="sellerID"
                   value={form.sellerID}
-                  onChange={(e) => setForm({ ...form, sellerID: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, sellerID: e.target.value })
+                  }
                 />
               </div>
 
@@ -137,7 +188,9 @@ const InvoiceIndex = ({ type }) => {
                   className="form-control"
                   placeholder="produkt"
                   value={form.product}
-                  onChange={(e) => setForm({ ...form, product: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, product: e.target.value })
+                  }
                 />
               </div>
 
@@ -146,7 +199,9 @@ const InvoiceIndex = ({ type }) => {
                   className="form-control"
                   placeholder="min cena"
                   value={form.minPrice}
-                  onChange={(e) => setForm({ ...form, minPrice: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, minPrice: e.target.value })
+                  }
                 />
               </div>
 
@@ -155,7 +210,9 @@ const InvoiceIndex = ({ type }) => {
                   className="form-control"
                   placeholder="max cena"
                   value={form.maxPrice}
-                  onChange={(e) => setForm({ ...form, maxPrice: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, maxPrice: e.target.value })
+                  }
                 />
               </div>
 
@@ -173,7 +230,6 @@ const InvoiceIndex = ({ type }) => {
                   Filtrovat
                 </button>
               </div>
-
             </div>
           </div>
         </>
@@ -182,10 +238,7 @@ const InvoiceIndex = ({ type }) => {
       {/* TABLE */}
       <InvoiceTable
         items={invoices || []}
-        deleteInvoice={async (id) => {
-          await apiDelete("/api/invoices/" + id);
-          queryClient.invalidateQueries(["invoices"]);
-        }}
+        deleteInvoice={deleteInvoice}
         onShow={setSelectedInvoiceId}
         onEdit={(id) => {
           setFormInvoiceId(id);

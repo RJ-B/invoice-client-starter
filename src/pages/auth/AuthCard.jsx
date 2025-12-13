@@ -3,20 +3,40 @@ import { useNavigate } from "react-router-dom";
 import { apiPost } from "../../utils/api";
 import "./AuthCard.css";
 
+/**
+ * AuthCard
+ *
+ * Komponenta zajišťující:
+ * - přihlášení uživatele (email + heslo)
+ * - registraci uživatele
+ * - přihlášení / registraci přes Google
+ * - animované přepínání mezi login a register kartou
+ */
 export default function AuthCard() {
+  /* ==================== STAVY ==================== */
+
+  /** Přepnutí karty (login / registrace) */
   const [flipped, setFlipped] = useState(false);
 
+  /** Přihlašovací údaje */
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /** Registrační údaje */
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
 
+  /** Zpráva pro uživatele (chyba / úspěch) */
   const [msg, setMsg] = useState("");
 
   const navigate = useNavigate();
 
+  /* ==================== POMOCNÉ FUNKCE ==================== */
+
+  /**
+   * Vymaže všechna pole formuláře a hlášku.
+   */
   const clearForm = () => {
     setEmail("");
     setPassword("");
@@ -26,14 +46,21 @@ export default function AuthCard() {
     setMsg("");
   };
 
+  /**
+   * Přepne kartu (login ↔ registrace) a vyčistí formulář.
+   */
   const flipCard = () => {
     setFlipped((prev) => !prev);
     clearForm();
   };
 
-  // ============================================
-  // LOGIN — EMAIL + HESLO
-  // ============================================
+  /* ========================================================
+     LOGIN — EMAIL + HESLO
+     ======================================================== */
+
+  /**
+   * Zpracování přihlášení uživatele.
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
     setMsg("");
@@ -41,6 +68,7 @@ export default function AuthCard() {
     try {
       const res = await apiPost("/api/auth/login", { email, password });
 
+      // uložení tokenu a dat uživatele
       localStorage.setItem("token", res.token);
       localStorage.setItem("user", JSON.stringify(res));
 
@@ -50,9 +78,13 @@ export default function AuthCard() {
     }
   };
 
-  // ============================================
-  // REGISTRACE
-  // ============================================
+  /* ========================================================
+     REGISTRACE
+     ======================================================== */
+
+  /**
+   * Zpracování registrace uživatele.
+   */
   const handleRegister = async (e) => {
     e.preventDefault();
     setMsg("");
@@ -67,6 +99,8 @@ export default function AuthCard() {
       });
 
       setMsg("Registrace proběhla úspěšně.");
+
+      // po krátké prodlevě přepneme zpět na login
       setTimeout(() => {
         setFlipped(false);
         clearForm();
@@ -76,9 +110,13 @@ export default function AuthCard() {
     }
   };
 
-  // ============================================
-  // GOOGLE LOGIN / REGISTRACE
-  // ============================================
+  /* ========================================================
+     GOOGLE LOGIN / REGISTRACE
+     ======================================================== */
+
+  /**
+   * Inicializace Google Identity Services.
+   */
   const handleGoogleInit = () => {
     if (!window.google) return;
 
@@ -103,6 +141,9 @@ export default function AuthCard() {
     });
   };
 
+  /**
+   * Vykreslení Google přihlašovacích tlačítek.
+   */
   const renderGoogleButtons = () => {
     if (!window.google) return;
 
@@ -127,18 +168,24 @@ export default function AuthCard() {
     }
   };
 
+  /**
+   * Inicializace Google loginu po načtení komponenty.
+   */
   useEffect(() => {
     handleGoogleInit();
     setTimeout(renderGoogleButtons, 300);
   }, []);
 
+  /** Určuje, zda je zpráva úspěšná */
   const isSuccess = msg.includes("úspěšně");
+
+  /* ==================== RENDER ==================== */
 
   return (
     <div className={`auth-card ${flipped ? "flipped" : ""}`}>
 
       {/* ========================================================
-                       LOGIN SIDE
+                          LOGIN SIDE
       ======================================================== */}
       <div className="auth-side front">
         <h1 className="welcome-title">Vítejte zpátky</h1>
@@ -184,7 +231,9 @@ export default function AuthCard() {
             </button>
           </div>
 
-          <button className="primary-btn login-btn">PŘIHLÁSIT SE</button>
+          <button className="primary-btn login-btn">
+            PŘIHLÁSIT SE
+          </button>
 
           <div className="divider">Nebo</div>
 
@@ -206,7 +255,7 @@ export default function AuthCard() {
       </div>
 
       {/* ========================================================
-                       REGISTER SIDE
+                         REGISTER SIDE
       ======================================================== */}
       <div className="auth-side back">
         <h1 className="welcome-title">Vytvořte účet</h1>
@@ -289,7 +338,9 @@ export default function AuthCard() {
 
           </div>
 
-          <button className="primary-btn register-btn">VYTVOŘIT ÚČET</button>
+          <button className="primary-btn register-btn">
+            VYTVOŘIT ÚČET
+          </button>
 
           <div className="divider">Nebo se registrujte přes</div>
 

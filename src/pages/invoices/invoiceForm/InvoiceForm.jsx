@@ -6,31 +6,51 @@ import Loader from "../../../components/loading/Loader";
 
 import "./InvoiceForm.css";
 
+/**
+ * Výchozí prázdný stav formuláře
+ * – používá se pro CREATE i RESET
+ */
+const EMPTY_INVOICE = {
+  invoiceNumber: "",
+  seller: { id: "" },
+  buyer: { id: "" },
+  issued: "",
+  dueDate: "",
+  product: "",
+  price: "",
+  vat: "",
+  note: "",
+};
+
+/**
+ * Formulář pro vytvoření / úpravu faktury
+ */
 export default function InvoiceForm({ id, onClose }) {
+  /* ================= DATA ================= */
+
   const { data: persons = [] } = usePersons();
   const { data: invoiceDetail, isLoading } = useInvoiceDetail(id);
-  const saveInvoice = useSaveInvoice();
+  const saveInvoice = useSaveInvoice(id);
 
-  const [invoice, setInvoice] = useState({
-    invoiceNumber: "",
-    seller: { id: "" },
-    buyer: { id: "" },
-    issued: "",
-    dueDate: "",
-    product: "",
-    price: "",
-    vat: "",
-    note: "",
-  });
+  /* ================= STATE ================= */
 
-  // Při úpravě faktury předvyplníme hodnoty
+  const [invoice, setInvoice] = useState(EMPTY_INVOICE);
+
+  /* ================= EFFECTS ================= */
+
+  /**
+   * Při EDITACI:
+   * - naplní formulář daty z backendu
+   * Při CREATE:
+   * - resetuje formulář
+   */
   useEffect(() => {
-    if (!invoiceDetail) {
-      // nová faktura – necháme defaultní prázdný stav
+    if (!id || !invoiceDetail) {
+      setInvoice(EMPTY_INVOICE);
       return;
     }
 
-    const normalized = {
+    setInvoice({
       ...invoiceDetail,
       seller: invoiceDetail.seller
         ? { id: invoiceDetail.seller.id }
@@ -38,31 +58,41 @@ export default function InvoiceForm({ id, onClose }) {
       buyer: invoiceDetail.buyer
         ? { id: invoiceDetail.buyer.id }
         : { id: "" },
-    };
+    });
+  }, [id, invoiceDetail]);
 
-    setInvoice(normalized);
-  }, [invoiceDetail]);
+  /* ================= HELPERS ================= */
 
+  /**
+   * Zavření formuláře + reset stavu
+   */
   const closeWithAnimation = () => {
     const backdrop = document.querySelector(".invoice-form-backdrop");
     const card = document.querySelector(".invoice-form-card");
 
-    backdrop.classList.add("closing-form-backdrop");
-    card.classList.add("closing-form-card");
+    backdrop?.classList.add("closing-form-backdrop");
+    card?.classList.add("closing-form-card");
 
-    setTimeout(() => onClose(), 300);
+    setTimeout(() => {
+      setInvoice(EMPTY_INVOICE);
+      onClose();
+    }, 300);
   };
 
+  /**
+   * Odeslání formuláře
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    saveInvoice.mutate(
-      { id, invoice },
-      {
-        onSuccess: () => closeWithAnimation(),
-      }
-    );
+    saveInvoice.mutate(invoice, {
+      onSuccess: () => {
+        closeWithAnimation();
+      },
+    });
   };
+
+  /* ================= RENDER ================= */
 
   if (isLoading) return <Loader />;
 
@@ -77,19 +107,21 @@ export default function InvoiceForm({ id, onClose }) {
     >
       <div className="invoice-form-card">
 
-        <button className="close-btn" onClick={closeWithAnimation}>×</button>
+        <button className="close-btn" onClick={closeWithAnimation}>
+          ×
+        </button>
 
         <h2>{id ? "Upravit fakturu" : "Vytvořit fakturu"}</h2>
 
         <form onSubmit={handleSubmit} className="invoice-form-grid">
 
-          {/* ČÍSLO FAKTURY */}
+          {/* ČÍSLO */}
           <div>
             <label className="form-label">Číslo faktury</label>
             <input
               className="form-control"
               type="text"
-              value={invoice.invoiceNumber || ""}
+              value={invoice.invoiceNumber}
               onChange={(e) =>
                 setInvoice({ ...invoice, invoiceNumber: e.target.value })
               }
@@ -102,7 +134,7 @@ export default function InvoiceForm({ id, onClose }) {
             <label className="form-label">Prodávající</label>
             <select
               className="form-select"
-              value={invoice.seller?.id || ""}
+              value={invoice.seller.id}
               onChange={(e) =>
                 setInvoice({
                   ...invoice,
@@ -125,7 +157,7 @@ export default function InvoiceForm({ id, onClose }) {
             <label className="form-label">Nakupující</label>
             <select
               className="form-select"
-              value={invoice.buyer?.id || ""}
+              value={invoice.buyer.id}
               onChange={(e) =>
                 setInvoice({
                   ...invoice,
@@ -149,7 +181,7 @@ export default function InvoiceForm({ id, onClose }) {
             <input
               className="form-control"
               type="date"
-              value={invoice.issued || ""}
+              value={invoice.issued}
               onChange={(e) =>
                 setInvoice({ ...invoice, issued: e.target.value })
               }
@@ -162,7 +194,7 @@ export default function InvoiceForm({ id, onClose }) {
             <input
               className="form-control"
               type="date"
-              value={invoice.dueDate || ""}
+              value={invoice.dueDate}
               onChange={(e) =>
                 setInvoice({ ...invoice, dueDate: e.target.value })
               }
@@ -176,7 +208,7 @@ export default function InvoiceForm({ id, onClose }) {
             <input
               className="form-control"
               type="text"
-              value={invoice.product || ""}
+              value={invoice.product}
               onChange={(e) =>
                 setInvoice({ ...invoice, product: e.target.value })
               }
@@ -184,13 +216,13 @@ export default function InvoiceForm({ id, onClose }) {
             />
           </div>
 
-          {/* CENA */}
+          {/* CENA + DPH */}
           <div>
             <label className="form-label">Cena bez DPH (Kč)</label>
             <input
               className="form-control"
               type="number"
-              value={invoice.price || ""}
+              value={invoice.price}
               onChange={(e) =>
                 setInvoice({ ...invoice, price: Number(e.target.value) })
               }
@@ -203,7 +235,7 @@ export default function InvoiceForm({ id, onClose }) {
             <input
               className="form-control"
               type="number"
-              value={invoice.vat || ""}
+              value={invoice.vat}
               onChange={(e) =>
                 setInvoice({ ...invoice, vat: Number(e.target.value) })
               }
@@ -216,7 +248,7 @@ export default function InvoiceForm({ id, onClose }) {
             <label className="form-label">Poznámka</label>
             <textarea
               className="form-control"
-              value={invoice.note || ""}
+              value={invoice.note}
               onChange={(e) =>
                 setInvoice({ ...invoice, note: e.target.value })
               }
@@ -226,16 +258,16 @@ export default function InvoiceForm({ id, onClose }) {
           {/* TLAČÍTKA */}
           <div className="full-row d-flex justify-content-end gap-2 mt-2">
             <button
-              className="btn btn-secondary"
               type="button"
+              className="btn btn-secondary"
               onClick={closeWithAnimation}
             >
               Zpět
             </button>
 
             <button
-              className="btn btn-primary"
               type="submit"
+              className="btn btn-primary"
               disabled={saveInvoice.isLoading}
             >
               {saveInvoice.isLoading ? "Ukládám…" : "Uložit fakturu"}

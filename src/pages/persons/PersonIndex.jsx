@@ -1,28 +1,59 @@
 import React, { useState } from "react";
-import { apiDelete } from "../../utils/api";
-import PersonTable from "./PersonTable";
-import { usePersons } from "./hooks/usePersons";
 import { useQueryClient } from "@tanstack/react-query";
-import "./Person.css";
 
+import { apiDelete } from "../../utils/api";
+import { usePersons } from "./hooks/usePersons";
+
+import PersonTable from "./PersonTable";
 import Loader from "../../components/loading/Loader";
 
 // MODAL COMPONENTS
 import PersonDetailCard from "./personDetail/PersonDetailCard";
 import PersonFormCard from "./personForm/PersonFormCard";
 
+import "./Person.css";
+
+/**
+ * Hlavní komponenta pro správu osob.
+ *
+ * Zajišťuje:
+ * - načtení seznamu osob
+ * - mazání osob
+ * - otevření modálních oken (detail, editace, vytvoření)
+ */
 const PersonIndex = () => {
   const queryClient = useQueryClient();
+
+  /**
+   * Načtení seznamu osob pomocí custom hooku.
+   * @property {Array<Object>} data - seznam osob
+   * @property {boolean} isLoading - stav načítání
+   */
   const { data: persons, isLoading } = usePersons();
 
-  // === MODAL STATES ===
+  /* ==================== MODAL STATES ==================== */
+
+  /** ID osoby zobrazené v detailním modalu */
   const [showDetailId, setShowDetailId] = useState(null);
+
+  /** ID osoby upravované ve formuláři */
   const [showEditId, setShowEditId] = useState(null);
+
+  /** Stav otevření formuláře pro vytvoření nové osoby */
   const [showCreate, setShowCreate] = useState(false);
 
+  /* ==================== METODY ==================== */
+
+  /**
+   * Odstraní osobu podle ID a znovu načte seznam osob.
+   *
+   * @param {number|string} id - Identifikátor osoby
+   */
   const deletePerson = async (id) => {
     try {
       await apiDelete("/api/persons/" + id);
+
+      // znovunačtení seznamu osob
       queryClient.invalidateQueries(["persons"]);
     } catch (error) {
       console.log(error.message);
@@ -30,31 +61,40 @@ const PersonIndex = () => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  /* ==================== STAVY ==================== */
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  /* ==================== RENDER ==================== */
 
   return (
     <div className="person-card">
 
-      {/* HEADER */}
+      {/* ===== HEADER ===== */}
       <div className="person-header">
         <h1>Seznam osob</h1>
-        <button className="btn-new-person" onClick={() => setShowCreate(true)}>
+
+        <button
+          type="button"
+          className="btn-new-person"
+          onClick={() => setShowCreate(true)}
+        >
           + Nová osoba
         </button>
       </div>
 
-      {/* TABLE */}
+      {/* ===== TABULKA OSOB ===== */}
       <PersonTable
-        deletePerson={deletePerson}
-        items={persons}
         label="Počet osob:"
+        items={persons}
+        deletePerson={deletePerson}
         onShow={(id) => setShowDetailId(id)}
         onEdit={(id) => setShowEditId(id)}
       />
 
-      {/* ===================================================== */}
-      {/*                     DETAIL MODAL                      */}
-      {/* ===================================================== */}
+      {/* ================= DETAIL MODAL ================= */}
       {showDetailId && (
         <div className="person-detail-backdrop animate-backdrop">
           <PersonDetailCard
@@ -64,9 +104,7 @@ const PersonIndex = () => {
         </div>
       )}
 
-      {/* ===================================================== */}
-      {/*                     EDIT MODAL                        */}
-      {/* ===================================================== */}
+      {/* ================= EDIT MODAL ================= */}
       {showEditId && (
         <div className="person-form-backdrop">
           <PersonFormCard
@@ -76,12 +114,12 @@ const PersonIndex = () => {
         </div>
       )}
 
-      {/* ===================================================== */}
-      {/*                     CREATE MODAL                      */}
-      {/* ===================================================== */}
+      {/* ================= CREATE MODAL ================= */}
       {showCreate && (
         <div className="person-form-backdrop">
-          <PersonFormCard onClose={() => setShowCreate(false)} />
+          <PersonFormCard
+            onClose={() => setShowCreate(false)}
+          />
         </div>
       )}
 
