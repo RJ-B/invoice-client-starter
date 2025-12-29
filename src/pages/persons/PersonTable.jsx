@@ -26,8 +26,8 @@ const PersonTable = ({ label, items, deletePerson, onShow, onEdit }) => {
 
       <div className="table-responsive">
         <div className="table-scroll-area">
-          <table className="table table-hover table-striped table-bordered align-middle">
-            <thead className="table-primary">
+          <table className="table table-hover table-striped table-bordered align-middle glass-table">
+            <thead>
               <tr>
                 <th style={{ width: "10%" }} className="text-center">
                   ID

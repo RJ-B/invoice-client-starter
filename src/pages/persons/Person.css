@@ -178,10 +178,18 @@
 }
 
 .glass-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+
   background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
   color: white !important;
-}
 
+  padding: 14px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  border: none;
+}
 
 
 /* ============================================================

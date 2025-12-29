@@ -4,10 +4,6 @@ import PropTypes from "prop-types";
 /**
  * Tabulka pro zobrazení seznamu faktur.
  * Komponenta předpokládá NORMALIZOVANÁ data z hooku.
- *
- * POZNÁMKA:
- * - Sloupec # zobrazuje skutečné ID z databáze
- * - Pořadí řádků určuje backend / hook (ne index)
  */
 export default function InvoiceTable({ items, deleteInvoice, onShow, onEdit }) {
   return (
@@ -22,12 +18,11 @@ export default function InvoiceTable({ items, deleteInvoice, onShow, onEdit }) {
         <table className="table glass-table table-hover table-bordered align-middle">
           <thead>
             <tr>
-              <th style={{ width: "80px" }}>ID</th>
-              <th>Číslo faktury</th>
+              <th style={{ width: "160px" }}>Číslo faktury</th>
               <th>Prodávající</th>
               <th>Nakupující</th>
-              <th style={{ width: "120px" }}>Cena</th>
-              <th style={{ width: "200px" }}>Akce</th>
+              <th style={{ width: "120px", textAlign: "right" }}>Cena</th>
+              <th style={{ width: "200px", textAlign: "center" }}>Akce</th>
             </tr>
           </thead>
 
@@ -35,19 +30,15 @@ export default function InvoiceTable({ items, deleteInvoice, onShow, onEdit }) {
             {items.length > 0 ? (
               items.map((item) => (
                 <tr key={item.id}>
-                  {/* === SKUTEČNÉ ID Z DB === */}
-                  <td className="text-center fw-semibold">
-                    {item.id}
-                  </td>
-
                   <td className="fw-semibold">
                     {item.invoiceNumber}
                   </td>
 
                   <td>{item.seller.name}</td>
+
                   <td>{item.buyer.name}</td>
 
-                  <td className="fw-semibold text-success">
+                  <td className="fw-semibold text-success text-end">
                     {item.price} Kč
                   </td>
 
@@ -82,7 +73,7 @@ export default function InvoiceTable({ items, deleteInvoice, onShow, onEdit }) {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center py-4 text-muted">
+                <td colSpan={5} className="text-center py-4 text-muted">
                   Žádné faktury k zobrazení
                 </td>
               </tr>
@@ -103,7 +94,10 @@ InvoiceTable.propTypes = {
         PropTypes.number,
         PropTypes.string,
       ]).isRequired,
-      invoiceNumber: PropTypes.string.isRequired,
+      invoiceNumber: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
       price: PropTypes.number.isRequired,
       seller: PropTypes.shape({
         name: PropTypes.string.isRequired,
